@@ -4,7 +4,7 @@ import { postProductSlice } from "./postProductSlice";
 import { productSlice } from "./productSlice";
 import { productsSlice } from "./productsSlice";
 import { putProductSlice } from "./putProductSlice";
-import { updateValuesSlice } from "./updateValuesSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -13,7 +13,7 @@ const store = configureStore({
     postProduct: postProductSlice,
     deleteProduct: deleteProductSlice,
     putProduct: putProductSlice,
-    updateValues: updateValuesSlice,
+   
   },
 });
 export default store;

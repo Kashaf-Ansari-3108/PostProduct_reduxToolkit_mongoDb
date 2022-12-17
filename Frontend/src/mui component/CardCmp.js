@@ -11,105 +11,91 @@ import { useState } from "react";
 import InputCmp from "./InputCmp";
 import SelectCmp from "./SelectCmp";
 import categories from "./categoryOption";
-import FileUploadCmp from "../bs component/FileUploadCmp";
-import { category, imgSrc, price, title } from "../store/updateValuesSlice";
 import ButtonCmp from "./ButtonCmp";
 import { putData } from "../store/putProductSlice";
+const style2 = {
+   border: '2px solid red',
+    margin: '10px',
+    width:'400px',
+    boxShadow: '-3px 0px 5px 12px rgba(235,115,115,0.75)',
+    webkitBoxShadow: '-3px 0px 5px 12px rgba(235,115,115,0.75)',
+    mozBoxShadow: '-3px 0px 5px 12px rgba(235,115,115,0.75)',
+    display:'flex',
+    flexDirection:'column',
+    gap:5,
+   
+ 
+};
 const style = {
-  bgcolor: "background.paper",
-
-  boxShadow: 24,
+  p: 4,
   display: "flex",
   flexDirection: "column",
-  gap: 1,
-};
+  gap: 2,
+}
 
 export default function CardCmp({ product }) {
   const [editMode, setEditMode] = useState(false);
+  const [titleVal, setTitleVal] = useState(product.title);
+  const [priceVal, setPriceVal] = useState(product.price);
+  const [categoryVal, setCategoryVal] = useState(product.category);
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state.updateValues);
+  const data = {
+    title: titleVal,
+    price: priceVal,
+    category: categoryVal,
+   _id: product._id,
+  };
+  
+  
   const deleteP = (data) => {
     dispatch(deleteData(data));
   };
-  const setTitle = (val) => {
-    dispatch(title(val));
-  };
-  const setPrice = (val) => {
-    dispatch(price(val));
-  };
-  const setCategory = (val) => {
-    dispatch(category(val));
-  };
-  const loadFile = (e) => {
-    let src = URL.createObjectURL(e.target.files[0]);
-    dispatch(imgSrc(src));
-  };
-  const data = {
-    title: selector.title,
-    price: selector.price,
-    category: selector.category,
-    imgSrc: selector.imgSrc,
-    _id: product._id,
-  };
+  
+  
+
   const update = (data) => {
     dispatch(putData(data));
     setEditMode(false);
   };
   return (
-    <Card sx={{}}>
+    <Card sx={style2}>
       {editMode == false ? (
         <>
-          <CardMedia
-            component="img"
-            alt="item image"
-            height="140"
-            image={
-              product.imageSrc
-                ? product.imageSrc
-                : "https://img.freepik.com/free-photo/purple-osteospermum-daisy-flower_1373-16.jpg?w=2000"
-            }
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+         <CardContent>
+            <Typography sx={{my:'30px',fontSize:'30px',borderBottom:"2px solid black"}} gutterBottom variant="h5" component="div">
               {product.title}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography sx={{my:'15px',fontSize:'20px',borderBottom:"1px solid grey"}} variant="body2" color="text.secondary">
               Price: Rs.{product.price}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography sx={{my:'15px',fontSize:'20px',borderBottom:"1px solid grey"}} variant="body2" color="text.secondary">
               Category: {product.category}
             </Typography>
           </CardContent>
           <CardActions>
-            <Button onClick={() => deleteP(product)} size="small">
-              Delete
-            </Button>
-            <Button onClick={() => setEditMode(true)} size="small">
-              Edit
-            </Button>
+            
+            <ButtonCmp label="Delete" onClick={() => deleteP(product)}/>
+            <ButtonCmp label="Edit" onClick={() => setEditMode(true)}/>
+             
           </CardActions>
         </>
       ) : (
         <>
           <Card sx={style}>
-            <FileUploadCmp
-              value={selector.imgSrc}
-              onChange={(e) => loadFile(e)}
-              label="Upload new image of the product"
-            />
+           
             <InputCmp
-              value={selector.title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={titleVal}
+              onChange={(e) =>  setTitleVal(e.target.value)}
               label="title"
             />
             <InputCmp
-              value={selector.price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={priceVal}
+              onChange={(e) => setPriceVal(e.target.value)}
               label="price"
             />
             <SelectCmp
-              value={selector.category}
-              onChange={(e) => setCategory(e.target.value)}
+              value={categoryVal}
+              onChange={(e) => setCategoryVal(e.target.value)}
               optionObj={categories}
               label="category of the product"
             />

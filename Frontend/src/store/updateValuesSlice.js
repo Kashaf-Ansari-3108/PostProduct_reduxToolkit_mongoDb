@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
+
 
 const updateValuesSlice = createSlice({
   name: "update_values",
@@ -7,7 +7,7 @@ const updateValuesSlice = createSlice({
     title: "",
     price: "",
     category: "",
-    imgSrc: "",
+    
   },
   reducers: {
     title(state, action) {
@@ -28,15 +28,10 @@ const updateValuesSlice = createSlice({
         category: action.payload,
       };
     },
-    imgSrc(state, action) {
-      return {
-        ...state,
-        imgSrc: action.payload,
-      };
-    },
+   
   },
 });
 
 const { actions, reducer } = updateValuesSlice;
-const { title, price, category, imgSrc } = actions;
-export { title, price, category, imgSrc, reducer as updateValuesSlice };
+const { title, price, category } = actions;
+export { title, price, category, reducer as updateValuesSlice };

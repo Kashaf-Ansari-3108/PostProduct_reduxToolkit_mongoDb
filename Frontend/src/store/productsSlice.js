@@ -6,7 +6,6 @@ const productsSlice = createSlice({
     title: "",
     price: "",
     category: "",
-    imgSrc: "",
   },
   reducers: {
     title(state, action) {
@@ -27,15 +26,9 @@ const productsSlice = createSlice({
         category: action.payload,
       };
     },
-    imgSrc(state, action) {
-      return {
-        ...state,
-        imgSrc: action.payload,
-      };
-    },
-  },
+   },
 });
 
 const { actions, reducer } = productsSlice;
-const { title, price, category, imgSrc } = actions;
-export { title, price, category, imgSrc, reducer as productsSlice };
+const { title, price, category } = actions;
+export { title, price, category, reducer as productsSlice };

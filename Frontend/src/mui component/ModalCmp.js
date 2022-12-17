@@ -5,11 +5,10 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputCmp from "./InputCmp";
 import SelectCmp from "./SelectCmp";
-import FileUploadCmp from "../bs component/FileUploadCmp";
 import ButtonCmp from "./ButtonCmp";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { category, imgSrc, price, title } from "../store/productsSlice";
+import { category, price, title } from "../store/productsSlice";
 import { postData } from "../store/postProductSlice";
 import categories from "./categoryOption";
 
@@ -44,15 +43,11 @@ export default function ModalCmp() {
   const setCategory = (val) => {
     dispatch(category(val));
   };
-  const loadFile = (e) => {
-    let src = URL.createObjectURL(e.target.files[0]);
-    dispatch(imgSrc(src));
-  };
+ 
   const data = {
     title: selector.title,
     price: selector.price,
     category: selector.category,
-    imgSrc: selector.imgSrc,
   };
   const post = (data) => {
     dispatch(postData(data));
@@ -85,10 +80,7 @@ export default function ModalCmp() {
             optionObj={categories}
             onChange={(e) => setCategory(e.target.value)}
           />
-          <FileUploadCmp
-            onChange={(e) => loadFile(e)}
-            label="Upload image of the product"
-          />
+         
           <ButtonCmp onClick={() => post(data)} label="Submit" />
         </Box>
       </Modal>
