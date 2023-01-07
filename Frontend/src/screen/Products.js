@@ -1,15 +1,14 @@
-import React from "react";
+import {useEffect} from "react";
 import ModalCmp from "../mui component/ModalCmp";
-import { fetchProduct } from "../store/productSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { Box, Grid } from "@mui/material";
 import CardCmp from "../mui component/CardCmp";
+import { getTransport } from "../store/getTransportSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const style = {
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+
   boxShadow: 24,
   p: 4,
   m: 4,
@@ -20,24 +19,22 @@ const style = {
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { status, data } = useSelector((state) => state.getProducts);
+  const { status, data } = useSelector((state) => state.getTransportSlice);
   useEffect(() => {
-    dispatch(fetchProduct());
+    dispatch(getTransport());
   }, [data]);
-  // console.log(status);
-  // console.log(data);
-
-  return (
+  
+return (
     <>
       <Box sx={style}>
         <ModalCmp />
       </Box>
       <Box sx={{ m: 5 }}>
         <Grid container spacing={2}>
-          {data.products?.map((product) => {
+          {data.transports?.map((transport) => {
             return (
-              <Grid item lg={4} md={6} sm={8} key={product._id}>
-                <CardCmp product={product} />
+              <Grid item lg={4} md={6} sm={8} key={transport._id}>
+                <CardCmp transport={transport} />
               </Grid>
             );
           })}

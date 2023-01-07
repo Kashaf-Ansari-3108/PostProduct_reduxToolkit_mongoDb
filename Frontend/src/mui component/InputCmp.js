@@ -1,16 +1,18 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-const InputCmp = ({ label, onChange, value }) => {
+const InputCmp = ({ label, onChange, value, type }) => {
   return (
     <>
-      <TextField
+      <TextField 
         autoFocus
         value={value}
         onChange={onChange}
-        id="outlined-basic"
+        color="success"
         label={label ? label : "Text Field"}
         variant="outlined"
+        fullWidth
+        type={type}
       />
     </>
   );

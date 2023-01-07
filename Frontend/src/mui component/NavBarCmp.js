@@ -12,9 +12,13 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import logo from "../assests/logo.png"
+import { Link } from "react-router-dom";
+import ButtonCmp from "./ButtonCmp";
+import { toast } from "react-hot-toast";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const pages = [{name:"Available Transports",href:"/"},{name:"Sign Up",href:"/signup"},{name:"Login",href:"/login"}];
+// const settings = ["Logout"];
 
 function NavBarCmp() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -34,9 +38,16 @@ function NavBarCmp() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const token = localStorage.getItem("token");
+  const user = JSON. parse(localStorage.getItem("user"));
+  const logout = ()=>{
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    toast.success("Loged Out !!!")
+  }
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{backgroundColor:"green"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -85,11 +96,17 @@ function NavBarCmp() {
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
+                a:{
+                  textDecoration:"none",
+                  color:"black",
+                  textTransform:"uppercase"
+                }
               }}
+              
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                <Link to={page.href}>  <Typography textAlign="center">{page.name}</Typography></Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -109,6 +126,7 @@ function NavBarCmp() {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+             
             }}
           >
             LOGO
@@ -116,19 +134,30 @@ function NavBarCmp() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", a:{
+                  textDecoration:"none",
+                  color:"white",
+                  textTransform:"uppercase"
+                } }}
               >
-                {page}
+               <Link to={page.href}> {page.name}</Link>
               </Button>
             ))}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
+            { user ?(<Box sx={{display:"flex",flexDirection:"row",gap:2}}>
+              <Typography component="p">{user.name}</Typography>
+              <ButtonCmp label="Logout" onClick={logout}/>
+             </Box>):(<></>)}
+             
+          {/* <Box sx={{ flexGrow: 0 }}>
+          
             <Tooltip title="Open settings">
+            
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                
               </IconButton>
             </Tooltip>
             <Menu
@@ -153,7 +182,7 @@ function NavBarCmp() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>

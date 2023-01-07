@@ -1,18 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { deleteProductSlice } from "./deleteProductSlice";
-import { postProductSlice } from "./postProductSlice";
-import { productSlice } from "./productSlice";
-import { productsSlice } from "./productsSlice";
-import { putProductSlice } from "./putProductSlice";
+import { addTransportSlice } from "./addTransportSlice";
+import { deleteTransportSlice } from "./deleteTransportSlice";
+import { getTransportSlice } from "./getTransportSlice";
+import { loginSlice } from "./loginSlice";
+import { signupSlice } from "./signupSlice";
+import { updateTransportSlice } from "./updateTransportSlice";
+
 
 
 const store = configureStore({
   reducer: {
-    products: productsSlice,
-    getProducts: productSlice,
-    postProduct: postProductSlice,
-    deleteProduct: deleteProductSlice,
-    putProduct: putProductSlice,
+   signupSlice:signupSlice,
+   loginSlice:loginSlice,
+   getTransportSlice:getTransportSlice,
+   addTransportSlice:addTransportSlice,
+   deleteTransportSlice:deleteTransportSlice,
+   updateTransportSlice:updateTransportSlice,
    
   },
 });

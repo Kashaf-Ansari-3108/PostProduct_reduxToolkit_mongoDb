@@ -8,9 +8,10 @@ import SelectCmp from "./SelectCmp";
 import ButtonCmp from "./ButtonCmp";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { category, price, title } from "../store/productsSlice";
-import { postData } from "../store/postProductSlice";
-import categories from "./categoryOption";
+import types from "./typeOption";
+import { Controller, useForm } from "react-hook-form";
+import { addTransport } from "../store/addTransportSlice";
+
 
 const style = {
   position: "absolute",
@@ -19,7 +20,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+ 
   boxShadow: 24,
   p: 4,
   display: "flex",
@@ -31,33 +32,29 @@ export default function ModalCmp() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+     transporter: "",
+     contact: "",
+     type:"",
+     price:"",
+     noOfSeats:"",
+ },
+  });
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state.products);
-
-  const setTitle = (val) => {
-    dispatch(title(val));
-  };
-  const setPrice = (val) => {
-    dispatch(price(val));
-  };
-  const setCategory = (val) => {
-    dispatch(category(val));
+  const onSubmit = (obj) => {
+    console.log(obj);
+    dispatch(addTransport(obj));
+    setOpen(false);
+    
   };
  
-  const data = {
-    title: selector.title,
-    price: selector.price,
-    category: selector.category,
-  };
-  const post = (data) => {
-    dispatch(postData(data));
-    setOpen(false);
-  };
+  
 
   return (
     <div>
-      <Typography variant="h4" sx={{ color: "red" }}>
-        Add Product <AiOutlinePlusCircle onClick={handleOpen} />
+      <Typography variant="h4" sx={{ color: "green" }}>
+        Add Transport <AiOutlinePlusCircle onClick={handleOpen} />
       </Typography>
 
       <Modal
@@ -67,21 +64,69 @@ export default function ModalCmp() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <InputCmp
-            onChange={(e) => setTitle(e.target.value)}
-            label="Product Title"
-          />
-          <InputCmp
-            onChange={(e) => setPrice(e.target.value)}
-            label="Price (in Rs.)"
-          />
-          <SelectCmp
-            label="Select category of the product"
-            optionObj={categories}
-            onChange={(e) => setCategory(e.target.value)}
-          />
+        <Controller
+                name="transporter"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Transporter"
+                    onChange={onChange}
+                    value={value}
+                    type="text"
+                  />
+                )}
+              />
+              <Controller
+                name="contact"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Contact"
+                    onChange={onChange}
+                    value={value}
+                    type="text"
+                  />
+                )}
+              />
+              <Controller
+                name="type"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <SelectCmp
+                    label="Select Type"
+                    onChange={onChange}
+                    value={value}
+                    optionObj = {types}
+                  />
+                )}
+              />
+              <Controller
+                name="noOfSeats"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Number of Seats"
+                    onChange={onChange}
+                    value={value}
+                    type="number"
+                  />
+                )}
+              />
+              <Controller
+                name="price"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Price Per km"
+                    onChange={onChange}
+                    value={value}
+                    type="text"
+                  />
+                )}
+              />
          
-          <ButtonCmp onClick={() => post(data)} label="Submit" />
+         
+          <ButtonCmp  label="Submit" onClick={handleSubmit(onSubmit)} />
         </Box>
       </Modal>
     </div>

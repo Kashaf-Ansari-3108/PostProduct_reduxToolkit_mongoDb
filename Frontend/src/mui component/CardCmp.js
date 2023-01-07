@@ -6,23 +6,24 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteData } from "../store/deleteProductSlice";
 import { useState } from "react";
 import InputCmp from "./InputCmp";
 import SelectCmp from "./SelectCmp";
-import categories from "./categoryOption";
+import categories from "./typeOption";
 import ButtonCmp from "./ButtonCmp";
-import { putData } from "../store/putProductSlice";
+import { deleteTransport } from "../store/deleteTransportSlice";
+import { Controller, useForm } from "react-hook-form";
+import types from "./typeOption"
+import { updateTransport } from "../store/updateTransportSlice";
+
 const style2 = {
-   border: '2px solid red',
+   backgroungColor:"blue",
     margin: '10px',
     width:'400px',
-    boxShadow: '-3px 0px 5px 12px rgba(235,115,115,0.75)',
-    webkitBoxShadow: '-3px 0px 5px 12px rgba(235,115,115,0.75)',
-    mozBoxShadow: '-3px 0px 5px 12px rgba(235,115,115,0.75)',
-    display:'flex',
-    flexDirection:'column',
+   display:'flex',
+   flexDirection:'column',
     gap:5,
+    boxShadow:24,
    
  
 };
@@ -33,76 +34,129 @@ const style = {
   gap: 2,
 }
 
-export default function CardCmp({ product }) {
+export default function CardCmp({ transport }) {
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+     transporter: transport.transporter,
+     contact:  transport.contact,
+     type: transport.type,
+     price:transport.price,
+     noOfSeats:transport.no_of_seats,
+ },
+  });
   const [editMode, setEditMode] = useState(false);
-  const [titleVal, setTitleVal] = useState(product.title);
-  const [priceVal, setPriceVal] = useState(product.price);
-  const [categoryVal, setCategoryVal] = useState(product.category);
   const dispatch = useDispatch();
-  const data = {
-    title: titleVal,
-    price: priceVal,
-    category: categoryVal,
-   _id: product._id,
-  };
-  
-  
-  const deleteP = (data) => {
-    dispatch(deleteData(data));
-  };
-  
-  
+ const deleteFunc = (id)=>{
+  dispatch(deleteTransport(id));
+  }
 
-  const update = (data) => {
-    dispatch(putData(data));
-    setEditMode(false);
-  };
-  return (
+const onSubmit = (obj)=>{
+// console.log(obj);
+const objtosend = {
+   ...obj,
+  _id: transport._id
+
+}
+dispatch(updateTransport(objtosend));
+setEditMode(false);
+  }
+  
+  
+return (
     <Card sx={style2}>
-      {editMode == false ? (
-        <>
-         <CardContent>
-            <Typography sx={{my:'30px',fontSize:'30px',borderBottom:"2px solid black"}} gutterBottom variant="h5" component="div">
-              {product.title}
-            </Typography>
-            <Typography sx={{my:'15px',fontSize:'20px',borderBottom:"1px solid grey"}} variant="body2" color="text.secondary">
-              Price: Rs.{product.price}
-            </Typography>
-            <Typography sx={{my:'15px',fontSize:'20px',borderBottom:"1px solid grey"}} variant="body2" color="text.secondary">
-              Category: {product.category}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            
-            <ButtonCmp label="Delete" onClick={() => deleteP(product)}/>
-            <ButtonCmp label="Edit" onClick={() => setEditMode(true)}/>
-             
-          </CardActions>
-        </>
-      ) : (
-        <>
+    { editMode == false ?(
+     <>
+     <CardContent>
+        <Typography sx={{my:'30px',fontSize:'20px',borderBottom:"2px solid black"}} gutterBottom variant="h5" component="div">
+         Transporter: {transport.transporter} <br/> Contact: {transport.contact} 
+        </Typography>
+        <Typography sx={{my:'15px',fontSize:'20px',borderBottom:"1px solid grey"}} variant="body2" color="text.secondary">
+        {transport.type}
+        </Typography>
+        <Typography sx={{my:'15px',fontSize:'20px',borderBottom:"1px solid grey"}} variant="body2" color="text.secondary">
+          Seats: {transport.no_of_seats}
+        </Typography>
+        <Typography sx={{my:'15px',fontSize:'20px',borderBottom:"1px solid grey"}} variant="body2" color="text.secondary">
+          Price: {transport.price}/km
+        </Typography>
+       
+      </CardContent>
+      <CardActions>
+        
+        <ButtonCmp label="Delete" onClick={()=>deleteFunc(transport._id)}/>
+        <ButtonCmp label="Edit" onClick={() => setEditMode(true)}/>
+         
+      </CardActions>
+    </>
+   ):(
+       
+    
+         <>
           <Card sx={style}>
-           
-            <InputCmp
-              value={titleVal}
-              onChange={(e) =>  setTitleVal(e.target.value)}
-              label="title"
-            />
-            <InputCmp
-              value={priceVal}
-              onChange={(e) => setPriceVal(e.target.value)}
-              label="price"
-            />
-            <SelectCmp
-              value={categoryVal}
-              onChange={(e) => setCategoryVal(e.target.value)}
-              optionObj={categories}
-              label="category of the product"
-            />
-            <ButtonCmp onClick={() => update(data)} label="Done" />
+          <Controller
+                name="transporter"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Transporter"
+                    onChange={onChange}
+                    value={value}
+                    type="text"
+                  />
+                )}
+              />
+              <Controller
+                name="contact"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Contact"
+                    onChange={onChange}
+                    value={value}
+                    type="text"
+                  />
+                )}
+              />
+              <Controller
+                name="type"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <SelectCmp
+                    label="Select Type"
+                    onChange={onChange}
+                    value={value}
+                    optionObj = {types}
+                  />
+                )}
+              />
+              <Controller
+                name="noOfSeats"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Number of Seats"
+                    onChange={onChange}
+                    value={value}
+                    type="number"
+                  />
+                )}
+              />
+              <Controller
+                name="price"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <InputCmp
+                    label="Price Per km"
+                    onChange={onChange}
+                    value={value}
+                    type="text"
+                  />
+                )}
+              />
+           <ButtonCmp label="Done" onClick={handleSubmit(onSubmit)} />
           </Card>
-        </>
-      )}
+        </> 
+   )}
     </Card>
   );
 }
