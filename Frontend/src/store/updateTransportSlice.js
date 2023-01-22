@@ -33,7 +33,7 @@ const updateTransport = createAsyncThunk("updateTransport", async (obj) => {
 //   console.log("objtosend",obj);
 
   const transport = await axios.put(
-    "http://localhost:5000/api/transport",
+    "https://rose-raven-fez.cyclic.app/api/transport",
     obj,
     {
       headers: {

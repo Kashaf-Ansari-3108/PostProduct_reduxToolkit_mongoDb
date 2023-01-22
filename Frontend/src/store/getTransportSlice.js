@@ -32,7 +32,7 @@ const { reducer } = getTransportSlice;
 const getTransport = createAsyncThunk("getTransport", async () => {
 //   console.log("objtosend",obj);
 
-  const transport = await axios.get("http://localhost:5000/api/transports");
+  const transport = await axios.get("https://rose-raven-fez.cyclic.app/api/transports");
 //    console.log("transport",transport.data);
   return transport.data;
 });

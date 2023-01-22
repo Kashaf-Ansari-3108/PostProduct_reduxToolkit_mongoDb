@@ -33,7 +33,7 @@ const deleteTransport = createAsyncThunk("deleteTransport", async (id) => {
     console.log(id);
    
   const transport = await axios.delete(
-    `http://localhost:5000/api/transport/${id}`,
+    `https://rose-raven-fez.cyclic.app/api/transport/${id}`,
     {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

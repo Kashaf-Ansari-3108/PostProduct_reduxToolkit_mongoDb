@@ -32,7 +32,7 @@ const { reducer } = signupSlice;
 const signupUser = createAsyncThunk("signupUser", async (obj) => {
   // console.log("objtosend",obj);
     
-   const user = await axios.post("http://localhost:5000/api/signup", obj)
+   const user = await axios.post("https://rose-raven-fez.cyclic.app/api/signup", obj)
   //  console.log("user",user.data);
    return user.data;
    

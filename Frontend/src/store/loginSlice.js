@@ -32,7 +32,7 @@ const { reducer } = loginSlice;
 const loginUser = createAsyncThunk("loginUser", async (obj) => {
   // console.log("objtosend",obj);
     
-   const user = await axios.post("http://localhost:5000/api/login", obj)
+   const user = await axios.post("https://rose-raven-fez.cyclic.app/api/login", obj)
 //    console.log("user",user.data);
    return user.data;
    
